@@ -3,10 +3,12 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import json
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
@@ -62,7 +64,7 @@ def send_message():
             add_message("user", newMessage)
             result = converse_with_chatGPT()
             add_message("assistant", result)
-        return 'OK'
+        return jsonify(messages)
 
 @app.route('/getResponse', methods=['GET'])
 def get_response():
